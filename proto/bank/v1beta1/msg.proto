@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package bank.v1beta1;
+
+option go_package = "github.com/similadayo/cosmosbank/x/bank/types";
+
+
+
+// Msg defines the bank module messages.
+service Msg {
+    // Send defines a method for sending coins from one account to another.
+    rpc Send(MsgSend) returns (MsgSendResponse);
+}
+
+// MsgSend represents a message to send coins from one account to another.
+message MsgSend {
+    string from_address = 1; // Sender address
+    string to_address = 2;  // Recipient address
+    string amount = 3;  // Amount to send, represented as a string for simplicity
+} 
+
+// MsgSendResponse defines the response structure for MsgSend.
+message MsgSendResponse {}

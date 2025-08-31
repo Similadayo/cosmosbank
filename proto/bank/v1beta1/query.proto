@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package bank.v1beta1;
+
+
+
+option go_package = "github.com/similadayo/cosmosbank/x/bank/types";
+
+// Query defines the gRPC query service for bank module.
+service Query {
+  // Get balance of an account
+  rpc Balance(QueryBalanceRequest) returns (QueryBalanceResponse);
+}
+// QueryBalanceRequest defines request type for balance query.
+message QueryBalanceRequest {
+  string address = 1;
+}
+
+// QueryBalanceResponse defines response type for balance query.
+message QueryBalanceResponse {
+  string balance = 1; // e.g., "1000atom"
+}
