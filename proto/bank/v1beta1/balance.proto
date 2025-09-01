@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package bank.v1beta1;
 
-option go_package = "github.com/your-username/cosmosbank/x/bank/types";
+option go_package = "github.com/similadayo/cosmosbank/x/bank/types";
 
 // Wrapper to store balances in KVStore
 message Balance {
