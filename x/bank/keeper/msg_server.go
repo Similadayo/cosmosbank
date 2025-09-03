@@ -14,6 +14,7 @@ const denom = "ucosmos"
 
 type MsgServer struct {
 	Keeper
+	types.UnimplementedMsgServer
 }
 
 func NewMsgServerImpl(keeper Keeper) MsgServer {
