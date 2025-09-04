@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package bank;
+
+option go_package = "github.com/similadayo/cosmosbank/x/bank/types";
+
+// Message for sending coins
+message MsgSend {
+  string from_address = 1;
+  string to_address = 2;
+  string amount = 3; // coins as string
+}
+
+message MsgSendResponse {}

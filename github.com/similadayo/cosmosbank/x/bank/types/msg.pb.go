@@ -26,7 +26,7 @@ type MsgSend struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FromAddress   string                 `protobuf:"bytes,1,opt,name=from_address,json=fromAddress,proto3" json:"from_address,omitempty"` // Sender address
 	ToAddress     string                 `protobuf:"bytes,2,opt,name=to_address,json=toAddress,proto3" json:"to_address,omitempty"`       // Recipient address
-	Amount        string                 `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`                              // Amount to send, represented as a string for simplicity
+	Amount        uint64                 `protobuf:"varint,3,opt,name=amount,proto3" json:"amount,omitempty"`                             // Amount to send, represented as a string for simplicity
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -75,11 +75,11 @@ func (x *MsgSend) GetToAddress() string {
 	return ""
 }
 
-func (x *MsgSend) GetAmount() string {
+func (x *MsgSend) GetAmount() uint64 {
 	if x != nil {
 		return x.Amount
 	}
-	return ""
+	return 0
 }
 
 // MsgSendResponse defines the response structure for MsgSend.
@@ -128,7 +128,7 @@ const file_bank_v1beta1_msg_proto_rawDesc = "" +
 	"\ffrom_address\x18\x01 \x01(\tR\vfromAddress\x12\x1d\n" +
 	"\n" +
 	"to_address\x18\x02 \x01(\tR\ttoAddress\x12\x16\n" +
-	"\x06amount\x18\x03 \x01(\tR\x06amount\"\x11\n" +
+	"\x06amount\x18\x03 \x01(\x04R\x06amount\"\x11\n" +
 	"\x0fMsgSendResponse2C\n" +
 	"\x03Msg\x12<\n" +
 	"\x04Send\x12\x15.bank.v1beta1.MsgSend\x1a\x1d.bank.v1beta1.MsgSendResponseB/Z-github.com/similadayo/cosmosbank/x/bank/typesb\x06proto3"

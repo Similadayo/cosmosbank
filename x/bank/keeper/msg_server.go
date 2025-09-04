@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"strconv"
 
 	math "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -34,7 +35,12 @@ func (k MsgServer) Send(goCtx context.Context, msg *types.MsgSend) (*types.MsgSe
 		return nil, err
 	}
 
-	amount := sdk.NewCoins(sdk.NewCoin(denom, math.NewIntFromUint64(msg.Amount)))
+	amt, err := strconv.ParseUint(msg.Amount, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	amount := sdk.NewCoins(sdk.NewCoin(denom, math.NewIntFromUint64(amt)))
 
 	fromBalance := k.GetBalance(ctx, from)
 	if !fromBalance.IsAllGTE(amount) {
