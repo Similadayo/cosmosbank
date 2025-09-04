@@ -1,12 +1,13 @@
 package keeper
 
 import (
+	"fmt"
+
 	"cosmossdk.io/store/prefix"
 	storetypes "cosmossdk.io/store/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/similadayo/cosmosbank/x/bank/types"
 )
 
@@ -45,21 +46,19 @@ func (k Keeper) GetBalance(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins {
 	return coins
 }
 
-func (k Keeper) SendCoins(ctx sdk.Context, fromAddr, toAddr sdk.AccAddress, amount sdk.Coins) error {
-	fromBalance := k.GetBalance(ctx, fromAddr)
-
-	if !fromBalance.IsAllGTE(amount) {
-		return sdkerrors.ErrInsufficientFunds
+func (k Keeper) SendCoins(ctx sdk.Context, from, to sdk.AccAddress, amt sdk.Coins) error {
+	if amt.Empty() {
+		return fmt.Errorf("cannot send empty amount")
 	}
 
-	// Subtract from sender
-	newFromBalance := fromBalance.Sub(amount...)
-	k.SetBalance(ctx, fromAddr, newFromBalance)
+	fromBalance := k.GetBalance(ctx, from)
+	if !fromBalance.IsAllGTE(amt) {
+		return fmt.Errorf("insufficient funds")
+	}
 
-	// Add to recipient
-	toBalance := k.GetBalance(ctx, toAddr)
-	newToBalance := toBalance.Add(amount...)
-	k.SetBalance(ctx, toAddr, newToBalance)
+	k.SetBalance(ctx, from, fromBalance.Sub(amt...))
+	toBalance := k.GetBalance(ctx, to)
+	k.SetBalance(ctx, to, toBalance.Add(amt...))
 
 	return nil
 }
