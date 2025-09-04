@@ -40,6 +40,11 @@ func (k MsgServer) Send(goCtx context.Context, msg *types.MsgSend) (*types.MsgSe
 		return nil, err
 	}
 
+	// 🚨 Reject zero or empty amount
+	if amt == 0 {
+		return nil, sdkerrors.ErrInvalidCoins
+	}
+
 	amount := sdk.NewCoins(sdk.NewCoin(denom, math.NewIntFromUint64(amt)))
 
 	fromBalance := k.GetBalance(ctx, from)
@@ -52,5 +57,4 @@ func (k MsgServer) Send(goCtx context.Context, msg *types.MsgSend) (*types.MsgSe
 	k.SetBalance(ctx, to, toBalance.Add(amount...))
 
 	return &types.MsgSendResponse{}, nil
-
 }
