@@ -8,8 +8,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	banktypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	"github.com/similadayo/cosmosbank/x/bank/client/cli"
 	"github.com/similadayo/cosmosbank/x/bank/keeper"
 	"github.com/similadayo/cosmosbank/x/bank/types"
+	"github.com/spf13/cobra"
 )
 
 type AppModule struct{}
@@ -70,4 +72,12 @@ func (am AppModuleBasic) ExportGenesis(ctx client.Context, cdc codec.JSONCodec) 
 
 func (am AppModuleBasic) ConsensusVersion() uint64 {
 	return 1
+}
+
+func (am AppModuleBasic) GetTxCmd() *cobra.Command {
+	return cli.NewTxCmd()
+}
+
+func (am AppModuleBasic) GetQueryCmd() *cobra.Command {
+	return cli.NewQueryCmd()
 }
