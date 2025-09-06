@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// CmdSend sends tokens from one address to another.
 func CmdSend() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "send [from_address] [to_address] [amount]",
@@ -34,11 +35,9 @@ func CmdSend() *cobra.Command {
 			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-
 		},
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
-
 	return cmd
 }

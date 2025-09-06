@@ -1,17 +1,16 @@
 package cli
 
 import (
-	"context"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/similadayo/cosmosbank/x/bank/types"
 	"github.com/spf13/cobra"
 )
 
+// CmdQueryBalance queries the balance of an address.
 func CmdQueryBalance() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "query-balance [address]",
+		Use:   "balance [address]",
 		Short: "Query the balance of an address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -24,9 +23,10 @@ func CmdQueryBalance() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Balance(context.Background(), &types.QueryBalanceRequest{
-				Address: address,
-			})
+			res, err := queryClient.Balance(
+				cmd.Context(),
+				&types.QueryBalanceRequest{Address: address},
+			)
 			if err != nil {
 				return err
 			}
@@ -36,6 +36,5 @@ func CmdQueryBalance() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
-
 	return cmd
 }
