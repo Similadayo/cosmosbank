@@ -51,7 +51,9 @@ func NewCosmosBankApp(logger log.Logger, db dbm.DB) *CosmosBankApp {
 
 	// module
 	appModule := bank.NewAppModule(bankKeeper)
-	mm := module.NewManager(appModule)
+	mm := module.NewManager(
+		appModule,
+	)
 
 	// register services
 	configurator := module.NewConfigurator(cdc, bApp.MsgServiceRouter(), bApp.GRPCQueryRouter())

@@ -6,11 +6,11 @@ import (
 
 	"cosmossdk.io/log"
 	dbm "github.com/cosmos/cosmos-db"
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/spf13/cobra"
 
 	"github.com/similadayo/cosmosbank/app"
 	"github.com/similadayo/cosmosbank/x/bank/client/cli"
@@ -22,28 +22,33 @@ func main() {
 		Short: "CosmosBank Daemon (node & CLI)",
 	}
 
-	// Add persistent flags (chain-id, home, etc.)
-	rootCmd.PersistentFlags().String("home", app.DefaultNodeHome, "node's home directory")
+	// --- IMPORTANT: pass a ModuleInitFlags value (no-op if you don't need module flags) ---
+	// This avoids the nil-function panic inside server.AddCommands.
+	var addModuleInitFlags servertypes.ModuleInitFlags = func(startCmd *cobra.Command) {
+		// no per-module start flags for now
+	}
 
-	// Add server commands (start, tendermint, etc.)
-	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, nil)
+	// register standard server commands (start, export, etc.)
+	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
 
-	// Add tx/query commands from your bank module
+	// add module tx/query cli roots
 	rootCmd.AddCommand(
 		cli.NewTxCmd(),
 		cli.NewQueryCmd(),
 	)
 
+	// execute
 	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome, app.AppName); err != nil {
 		os.Exit(1)
 	}
-
 }
 
+// newApp must match servertypes.AppCreator signature
 func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer, appOpts servertypes.AppOptions) servertypes.Application {
 	return app.NewCosmosBankApp(logger, db)
 }
 
+// appExport must match servertypes.AppExporter signature
 func appExport(
 	logger log.Logger,
 	db dbm.DB,

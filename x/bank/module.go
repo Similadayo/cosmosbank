@@ -11,12 +11,18 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	banktype "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	genutil "github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	"github.com/similadayo/cosmosbank/x/bank/client/cli"
 	"github.com/similadayo/cosmosbank/x/bank/keeper"
 	"github.com/similadayo/cosmosbank/x/bank/types"
 	"github.com/spf13/cobra"
+)
+
+var ModuleBasics = module.NewBasicManager(
+	genutil.AppModuleBasic{}, // provides `init` command
+	AppModuleBasic{},
 )
 
 // AppModuleBasic defines the basic application module used by the bank module.
